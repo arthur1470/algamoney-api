@@ -2,8 +2,10 @@ package com.algaworks.algamoneyapi.algamoneyapi.resource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,16 +30,17 @@ public class CategoryResource {
 	private CategoryRepository categoryRepository;
 	
 	@GetMapping
-	public List<Category> getAll() {
-		return categoryRepository.findAll();
+	public ResponseEntity<List<Category>> getAll() {
+		List<Category> category = categoryRepository.findAll();
+		return ResponseEntity.ok(category);
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Category> teste(@RequestBody Category category, HttpServletResponse response) {
+	public ResponseEntity<Category> insert(@RequestBody @Valid Category category, HttpServletResponse response) {
 		Category insertedCategory = categoryRepository.insert(category);
 		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
 					.buildAndExpand(insertedCategory.getId())
 					.toUri();
 		
@@ -48,12 +51,12 @@ public class CategoryResource {
 		
 	@GetMapping("/{id}")
 	public ResponseEntity<Category> findById(@PathVariable String id) {
-		Category category = categoryRepository.findById(id).orElse(null);
+		Optional<Category> category = categoryRepository.findById(id);
 		
-		if(category == null) {
+		if(category.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		return ResponseEntity.ok().body(category);				
+		return ResponseEntity.ok(category.get());				
 	}
 }
