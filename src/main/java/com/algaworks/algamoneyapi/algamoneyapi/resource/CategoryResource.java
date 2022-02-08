@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +54,7 @@ public class CategoryResource {
 		Optional<Category> category = categoryRepository.findById(id);
 		
 		if(category.isEmpty()) {
-			return ResponseEntity.notFound().build();
+			throw new EmptyResultDataAccessException(1);
 		}
 		
 		return ResponseEntity.ok(category.get());				
