@@ -2,15 +2,28 @@ package com.algaworks.algamoneyapi.algamoneyapi.model;
 
 import java.util.Objects;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-@Document(collection = "person")
+@Entity(name = "person")
 public class Person {
 	
-	private String id;	
-	private String name;		
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;	
+	private String name;	
+	@Column(name="is_active")
 	private Boolean isActive;	
+	@Embedded
 	private Address address;	
+
+	public Person() {
+		super();
+	}
 
 	public Person(String name, Boolean isActive, Address address) {
 		super();
@@ -19,7 +32,7 @@ public class Person {
 		this.address = address;
 	}
 	
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 	
