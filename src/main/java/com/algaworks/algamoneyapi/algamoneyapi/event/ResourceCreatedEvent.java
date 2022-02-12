@@ -8,9 +8,9 @@ public class ResourceCreatedEvent extends ApplicationEvent {
 	private static final long serialVersionUID = 1L;
 
 	private HttpServletResponse response;
-	private String id;
+	private Long id;
 	
-	public ResourceCreatedEvent(Object source, HttpServletResponse response, String id) {
+	public ResourceCreatedEvent(Object source, HttpServletResponse response, Long id) {
 		super(source);
 		this.response = response;
 		this.id = id;
@@ -20,7 +20,7 @@ public class ResourceCreatedEvent extends ApplicationEvent {
 		return response;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 }

@@ -1,20 +1,55 @@
 package com.algaworks.algamoneyapi.algamoneyapi.model;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.util.Objects;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-import lombok.Data;
+@Entity(name = "category")
+public class Category {	
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;		
+	private String name;
+	
+	public Category() {
+		super();
+	};
+	
+	public Category(String name) {
+		super();
+		this.name = name;
+	}	
 
-@Data
-@Document(collection = "category")
-public class Category {
+	public String getName() {
+		return name;
+	}
 
-	@Id		
-	private String id;	
-	@NotNull
-	@Size(min = 3, max = 30)
-	private String name;		
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Long getId() {
+		return id;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Category other = (Category) obj;
+		return Objects.equals(id, other.id);
+	}	
 }

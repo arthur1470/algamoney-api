@@ -3,6 +3,7 @@ package com.algaworks.algamoneyapi.algamoneyapi.dto;
 import javax.validation.constraints.NotNull;
 
 import com.algaworks.algamoneyapi.algamoneyapi.model.Address;
+import com.algaworks.algamoneyapi.algamoneyapi.model.Person;
 
 public class PersonDto {
 
@@ -23,4 +24,8 @@ public class PersonDto {
 	public Address getAddress() {
 		return address;
 	}	
+	
+	public Person getPerson() {
+		return new Person(name, isActive, address);
+	}
 }
