@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,28 +21,28 @@ public class Entry {
 	private String description;
 	private LocalDate expirationDate;
 	private LocalDate paymentDay;
-	private Double value;
+	private Double amount;
 	private String observationNote;		
+	@Enumerated(EnumType.STRING)
+	private EntryType entryType;	
 	@ManyToOne
 	@JoinColumn(name = "person_id")
 	private Person person;		
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private Category category;
-	@Enumerated
-	private EntryType entryType;	
 	
 	public Entry() {
 		super();
 	}
 	
-	public Entry(String description, LocalDate expirationDate, LocalDate paymentDay, Double value,
+	public Entry(String description, LocalDate expirationDate, LocalDate paymentDay, Double amount,
 			String observationNote, Person person, Category category, EntryType entryType) {
 		super();
 		this.description = description;
 		this.expirationDate = expirationDate;
 		this.paymentDay = paymentDay;
-		this.value = value;
+		this.amount = amount;
 		this.observationNote = observationNote;
 		this.person = person;
 		this.category = category;
@@ -67,11 +68,11 @@ public class Entry {
 	public void setPaymentDay(LocalDate paymentDay) {
 		this.paymentDay = paymentDay;
 	}
-	public Double getValue() {
-		return value;
+	public Double getAmount() {
+		return amount;
 	}
-	public void setValue(Double value) {
-		this.value = value;
+	public void setAmount(Double amount) {
+		this.amount = amount;
 	}
 	public String getObservationNote() {
 		return observationNote;

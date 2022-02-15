@@ -50,7 +50,7 @@ public class EntryServiceImpl implements EntryService {
 	public Entry update(Long id, Entry entry) {
 		Entry entryDatabase = findById(id);
 		BeanUtils.copyProperties(entry, entryDatabase);
-		return entryRepository.save(entryDatabase);
+		return entryRepository.saveAndFlush(entryDatabase);
 	}
 
 }

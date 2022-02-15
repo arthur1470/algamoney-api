@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -47,11 +48,20 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, error, headers, HttpStatus.BAD_REQUEST, request);
 	}
 	
-	@ExceptionHandler({ EmptyResultDataAccessException.class })
-	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler({ EmptyResultDataAccessException.class })	
 	public ResponseEntity<Object> handleEmptyResultDataAccessException(WebRequest request, EmptyResultDataAccessException ex) {
 		
 		String userErrorMessage = messageSource.getMessage("resource.not-found", null, LocaleContextHolder.getLocale());
+		String developerErrorMessage = ex.toString();
+		
+		List<Error> error = Arrays.asList(new Error(userErrorMessage, developerErrorMessage));
+		
+		return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler({ DataIntegrityViolationException.class })	
+	public ResponseEntity<Object> handleDataIntegrityViolationException(WebRequest request, DataIntegrityViolationException ex) {
+		String userErrorMessage = messageSource.getMessage("resource.operation-not-allowed", null, LocaleContextHolder.getLocale());
 		String developerErrorMessage = ex.toString();
 		
 		List<Error> error = Arrays.asList(new Error(userErrorMessage, developerErrorMessage));
