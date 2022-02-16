@@ -11,17 +11,22 @@ import org.springframework.stereotype.Service;
 
 import com.algaworks.algamoneyapi.algamoneyapi.event.ResourceCreatedEvent;
 import com.algaworks.algamoneyapi.algamoneyapi.model.Entry;
+import com.algaworks.algamoneyapi.algamoneyapi.model.Person;
 import com.algaworks.algamoneyapi.algamoneyapi.repository.EntryRepository;
+import com.algaworks.algamoneyapi.algamoneyapi.repository.PersonRepository;
+import com.algaworks.algamoneyapi.algamoneyapi.service.exception.PersonNullOrInactiveException;
 
 @Service
 public class EntryServiceImpl implements EntryService {
 
 	private final EntryRepository entryRepository;
 	private final ApplicationEventPublisher publisher;
+	private final PersonRepository personRepository;
 	
-	public EntryServiceImpl(EntryRepository entryRepository, ApplicationEventPublisher publisher) {
+	public EntryServiceImpl(EntryRepository entryRepository, ApplicationEventPublisher publisher, PersonRepository personRepository) {
 		this.entryRepository = entryRepository;
 		this.publisher = publisher;
+		this.personRepository = personRepository;
 	}
 	
 	@Override
@@ -31,8 +36,15 @@ public class EntryServiceImpl implements EntryService {
 
 	@Override
 	public Entry insert(Entry entry, HttpServletResponse response) {
+		Person person = personRepository.getById(entry.getPerson().getId());
+		
+		if(person == null || person.isInactive()) {
+			throw new PersonNullOrInactiveException();
+		}
+		
+		
 		entry = entryRepository.saveAndFlush(entry);
-		publisher.publishEvent(new ResourceCreatedEvent(this, response, entry.getId()));		
+		publisher.publishEvent(new ResourceCreatedEvent(this, response, entry.getId()));
 		return entry;
 	}
 

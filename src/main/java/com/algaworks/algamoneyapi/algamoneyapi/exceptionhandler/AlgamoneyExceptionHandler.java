@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.algaworks.algamoneyapi.algamoneyapi.service.exception.PersonNullOrInactiveException;
+
 @ControllerAdvice
 public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -63,6 +65,16 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleDataIntegrityViolationException(WebRequest request, DataIntegrityViolationException ex) {
 		String userErrorMessage = messageSource.getMessage("resource.operation-not-allowed", null, LocaleContextHolder.getLocale());
 		String developerErrorMessage = ExceptionUtils.getRootCauseMessage(ex);
+		
+		List<Error> error = Arrays.asList(new Error(userErrorMessage, developerErrorMessage));
+		
+		return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ PersonNullOrInactiveException.class })	
+	public ResponseEntity<Object> handlePersonNullOrInactiveException(WebRequest request, PersonNullOrInactiveException ex) {
+		String userErrorMessage = messageSource.getMessage("person.null-or-inactive", null, LocaleContextHolder.getLocale());
+		String developerErrorMessage = ex.toString();
 		
 		List<Error> error = Arrays.asList(new Error(userErrorMessage, developerErrorMessage));
 		

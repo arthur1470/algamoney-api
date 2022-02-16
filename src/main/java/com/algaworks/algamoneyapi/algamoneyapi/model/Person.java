@@ -59,6 +59,10 @@ public class Person {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
+	
+	public boolean isInactive() {
+		return !getIsActive();
+	}
 
 	@Override
 	public int hashCode() {
