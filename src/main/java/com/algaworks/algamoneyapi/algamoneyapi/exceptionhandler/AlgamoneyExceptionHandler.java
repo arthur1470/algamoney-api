@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -18,7 +19,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -33,7 +33,7 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		
 		String userErrorMessage = messageSource.getMessage("message.invalid", null, LocaleContextHolder.getLocale());
-		String developerErrorMessage = ex.getCause().getMessage();
+		String developerErrorMessage = ExceptionUtils.getRootCauseMessage(ex);
 		
 		List<Error> error = Arrays.asList(new Error(userErrorMessage, developerErrorMessage));
 		
@@ -52,7 +52,7 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleEmptyResultDataAccessException(WebRequest request, EmptyResultDataAccessException ex) {
 		
 		String userErrorMessage = messageSource.getMessage("resource.not-found", null, LocaleContextHolder.getLocale());
-		String developerErrorMessage = ex.toString();
+		String developerErrorMessage = ExceptionUtils.getRootCauseMessage(ex);
 		
 		List<Error> error = Arrays.asList(new Error(userErrorMessage, developerErrorMessage));
 		
@@ -62,7 +62,7 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler({ DataIntegrityViolationException.class })	
 	public ResponseEntity<Object> handleDataIntegrityViolationException(WebRequest request, DataIntegrityViolationException ex) {
 		String userErrorMessage = messageSource.getMessage("resource.operation-not-allowed", null, LocaleContextHolder.getLocale());
-		String developerErrorMessage = ex.toString();
+		String developerErrorMessage = ExceptionUtils.getRootCauseMessage(ex);
 		
 		List<Error> error = Arrays.asList(new Error(userErrorMessage, developerErrorMessage));
 		
