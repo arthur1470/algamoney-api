@@ -13,6 +13,7 @@ public class EntryDto {
 
 	@NotNull
 	private String description;
+	@NotNull
 	private LocalDate expirationDate;
 	private LocalDate paymentDay;
 	@NotNull

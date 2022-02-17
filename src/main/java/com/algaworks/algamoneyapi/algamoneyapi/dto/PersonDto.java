@@ -1,5 +1,6 @@
 package com.algaworks.algamoneyapi.algamoneyapi.dto;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.algaworks.algamoneyapi.algamoneyapi.model.Address;
@@ -7,7 +8,7 @@ import com.algaworks.algamoneyapi.algamoneyapi.model.Person;
 
 public class PersonDto {
 
-	@NotNull
+	@NotEmpty
 	private String name;		
 	private Boolean isActive;
 	@NotNull

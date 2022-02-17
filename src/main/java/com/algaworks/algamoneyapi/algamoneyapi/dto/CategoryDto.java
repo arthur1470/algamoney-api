@@ -1,13 +1,13 @@
 package com.algaworks.algamoneyapi.algamoneyapi.dto;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import com.algaworks.algamoneyapi.algamoneyapi.model.Category;
 
 public class CategoryDto {
 
-	@NotNull
+	@NotEmpty
 	@Size(min = 3, max = 30)
 	private String name;
 
