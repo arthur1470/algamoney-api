@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algamoneyapi.algamoneyapi.dto.EntryDto;
 import com.algaworks.algamoneyapi.algamoneyapi.model.Entry;
+import com.algaworks.algamoneyapi.algamoneyapi.repository.filter.EntrySearchFilter;
 import com.algaworks.algamoneyapi.algamoneyapi.service.entry.EntryService;
 
 @RestController
@@ -28,13 +29,11 @@ public class EntryResource {
 	
 	public EntryResource(EntryService entryService) {
 		this.entryService = entryService;
-	}
+	}	
 	
 	@GetMapping
-	public ResponseEntity<List<Entry>> getAll() {
-		List<Entry> entry = entryService.getAll();		
-		
-		return ResponseEntity.ok(entry);
+	public List<Entry> search(EntrySearchFilter searchFilter) {
+		return entryService.findByFilter(searchFilter);
 	}
 	
 	@PostMapping

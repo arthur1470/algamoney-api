@@ -14,6 +14,7 @@ import com.algaworks.algamoneyapi.algamoneyapi.model.Entry;
 import com.algaworks.algamoneyapi.algamoneyapi.model.Person;
 import com.algaworks.algamoneyapi.algamoneyapi.repository.EntryRepository;
 import com.algaworks.algamoneyapi.algamoneyapi.repository.PersonRepository;
+import com.algaworks.algamoneyapi.algamoneyapi.repository.filter.EntrySearchFilter;
 import com.algaworks.algamoneyapi.algamoneyapi.service.exception.PersonNullOrInactiveException;
 
 @Service
@@ -63,6 +64,11 @@ public class EntryServiceImpl implements EntryService {
 		Entry entryDatabase = findById(id);
 		BeanUtils.copyProperties(entry, entryDatabase);
 		return entryRepository.saveAndFlush(entryDatabase);
+	}
+
+	@Override
+	public List<Entry> findByFilter(EntrySearchFilter filter) {
+		return entryRepository.filter(filter);
 	}
 
 }
